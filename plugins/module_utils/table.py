@@ -29,10 +29,14 @@ class TableClient:
 
     def list_records(self, table, query=None):
         base_query = _query(query)
-        base_query["sysparm_limit"] = self.batch_size
+            
+        if "sysparm_limit" not in base_query or base_query["sysparm_limit"] > self.batch_size:
+            base_query["sysparm_limit"] = self.batch_size
+        if "sysparm_offset" not in base_query:
+            base_query["sysparm_offset"] = 0
 
-        offset = 0
-        total = 1  # Dummy value that ensures loop executes at least once
+        offset = base_query["sysparm_offset"]
+        total = 1 +  base_query["sysparm_offset"]  # Dummy value that ensures loop executes at least once
         result = []
 
         while offset < total:
@@ -41,7 +45,7 @@ class TableClient:
             )
 
             result.extend(response.json["result"])
-            total = int(response.headers["x-total-count"])
+            total = int(response.headers["x-total-count"]) + base_query["sysparm_offset"]
             offset += self.batch_size
 
         return result

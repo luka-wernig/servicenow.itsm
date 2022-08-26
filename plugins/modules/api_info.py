@@ -253,6 +253,14 @@ def main():
             type="bool",
             default=False,  # to enforce False when this parameter is omitted from a playbook
         ),  # Do not execute a select count(*) on table (default: false)
+        sysparm_limit=dict(
+            type="int",
+            default=1000
+        ),
+        sysparm_offset=dict(
+            type="int",
+            default=0
+        ),
     )
 
     module = AnsibleModule(

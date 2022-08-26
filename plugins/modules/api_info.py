@@ -222,6 +222,9 @@ def run(module, table_client):
     search_dict.update(columns=columns)
     query = utils.filter_dict(search_dict, *POSSIBLE_FILTER_PARAMETERS)
     servicenow_query = transform_query_to_servicenow_query(query)
+    if module.params["count_only"]:
+        #return table_client.list_records(table_name(module), True, servicenow_query)
+        return table_client.count_only(table_name(module), servicenow_query)
     return table_client.list_records(table_name(module), servicenow_query)
 
 
@@ -261,11 +264,27 @@ def main():
             type="int",
             default=0
         ),
+        count_only=dict(
+            type="bool",
+            default=False
+        ),
     )
 
     module = AnsibleModule(
         supports_check_mode=True,
         argument_spec=arg_spec,
+        mutually_exclusive=[
+          ("count_only", "sysparm_query"),
+          ("count_only", "display_value"),
+          ("count_only", "exclude_reference_link"),
+          ("count_only", "columns"),
+          ("count_only", "query_category"),
+          ("count_only", "query_no_domain"),
+          ("count_only", "no_count"),
+          ("count_only", "sysparm_offset"),
+          ("count_only", "sysparm_limit"),
+
+        ]
     )
 
     try:

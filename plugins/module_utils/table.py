@@ -38,12 +38,12 @@ class TableClient:
         offset = base_query["sysparm_offset"]
         total = 1 +  base_query["sysparm_offset"]  # Dummy value that ensures loop executes at least once
         result = []
-
+        
         while offset < total:
             response = self.client.get(
                 _path(table), query=dict(base_query, sysparm_offset=offset)
             )
-
+        
             result.extend(response.json["result"])
             total = int(response.headers["x-total-count"]) + base_query["sysparm_offset"]
             offset += self.batch_size
@@ -86,6 +86,13 @@ class TableClient:
     def delete_record(self, table, record, check_mode):
         if not check_mode:
             self.client.delete(_path(table, record["sys_id"]))
+
+    def count_only(self, table, query, must_exist=False):
+        base_query = _query(query)
+        count = self.client.count(
+            _path(table)
+        )
+        return dict(count=count)
 
 
 def find_user(table_client, user_id):

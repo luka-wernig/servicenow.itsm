@@ -192,3 +192,15 @@ class Client:
         resp = self.request("DELETE", path, query=query)
         if resp.status != 204:
             raise UnexpectedAPIResponse(resp.status, resp.data)
+
+    #def head(self, path, query=None):
+    #    resp = self.request("GET", path, query=query)
+    #    if resp.status in (200, 404):
+    #        return resp.headers
+    #    raise UnexpectedAPIResponse(resp.status, resp.data)
+##
+    def count(self, path, query=None):
+        resp = self.request("GET", path, query=query)
+        if resp.status in (200, 404):
+            return int(resp.headers["x-total-count"])
+        raise UnexpectedAPIResponse(resp.status, resp.data)

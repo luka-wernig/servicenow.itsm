@@ -15,12 +15,13 @@ SN_QUERY_MAPPING = dict(
     fields="sysparm_fields",
     columns="sysparm_fields",
     query_category="sysparm_query_category",
-    limit="sysparm_limit",
+    sysparm_limit="sysparm_limit",
     view="sysparm_view",
     query_no_domain="sysparm_query_no_domain",
     no_count="sysparm_no_count",
     sys_id="sys_id",
     sysparm_query="sysparm_query",
+    sysparm_offset="sysparm_offset"
 )
 
 # FIELD_COLUMNS_NAME and FIELD_QUERY_NAME are the ones that are additionally modified in api_info.py,
@@ -32,7 +33,7 @@ FIELD_DATA = "data"
 FIELD_TEMPLATE = "template"
 FIELD_DATA_RENDERED = "data_rendered"
 
-POSSIBLE_FILTER_PARAMETERS = [
+POSSIBLE_FILTER_PARAMETERS = [  
     FIELD_QUERY_NAME,
     "display_value",
     "exclude_reference_link",
@@ -40,6 +41,8 @@ POSSIBLE_FILTER_PARAMETERS = [
     "query_category",
     "query_no_domain",
     "no_count",
+    "sysparm_offset",
+    "sysparm_limit",
     FIELD_COLUMNS_NAME,
     FIELD_SYS_ID,
 ]
